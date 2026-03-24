@@ -4,10 +4,15 @@ import { logger } from "./logger";
 export const sendEmail = async (to: string, subject: string, html: string) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false, // TLS (STARTTLS)
       auth: {
         user: process.env.EMAIL_USER?.trim(),
         pass: process.env.EMAIL_PASS?.replace(/\s+/g, ""), // Remove spaces in App password
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
