@@ -5,6 +5,6 @@ echo "Generating Prisma client..."
 npx prisma generate
 
 echo "Installing Playwright browsers..."
-npx playwright install --with-deps
+npx playwright install
 
 echo "Build completed!"
