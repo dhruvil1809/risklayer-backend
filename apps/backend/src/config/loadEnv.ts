@@ -3,7 +3,7 @@ import {
   validateEnv,
   checkNonEmpty,
   checkIsValidUrl,
-} from "../../../../configuration/envChecker";
+} from "../../configuration/envChecker";
 
 // Load environment variables from the root .env
 loadEnvVariables();
