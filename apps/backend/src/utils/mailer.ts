@@ -1,33 +1,21 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { logger } from "./logger";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendEmail = async (to: string, subject: string, html: string) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false, // TLS (STARTTLS)
-      auth: {
-        user: process.env.EMAIL_USER?.trim(),
-        pass: process.env.EMAIL_PASS?.replace(/\s+/g, ""), // Remove spaces in App password
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-
-    const mailOptions = {
-      from: `"RiskLayer" <${process.env.EMAIL_USER}>`,
+    const response = await resend.emails.send({
+      from: "RiskLayer <onboarding@resend.dev>", // change later to your domain
       to,
       subject,
       html,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    logger.info(`Email sent to ${to}: ${info.messageId}`);
-    return info;
+    logger.info(`Email sent to ${to}: ${JSON.stringify(response)}`);
+    return response;
   } catch (error) {
     logger.error(`Error sending email to ${to}:`, error);
-    throw error; // Re-throw so controllers can handle it if needed
+    throw error;
   }
 };
