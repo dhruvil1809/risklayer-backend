@@ -72,7 +72,9 @@ export const startScan = async (req: AuthenticatedRequest, res: Response): Promi
         const existingScan = await db.scan.findFirst({
             where: {
                 user_id: userId,
-                domain: domain
+                url: {
+                    contains: domain
+                }
             }
         });
 
@@ -88,7 +90,6 @@ export const startScan = async (req: AuthenticatedRequest, res: Response): Promi
         const scan = await db.scan.create({
             data: {
                 url: resolvedUrl,
-                domain: domain,
                 user_id: userId,
                 ssl_info: sslInfo as any,
                 status: "queued",
@@ -136,7 +137,6 @@ export const getUserScans = async (req: AuthenticatedRequest, res: Response): Pr
             select: {
                 id: true,
                 url: true,
-                domain: true,
                 status: true,
                 score: true,
                 ssl_info: true,
